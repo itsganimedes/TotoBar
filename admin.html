@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Panel Admin – Toto Bar</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/admin.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2 class="logo">Toto Bar</h2>
+
+        <nav>
+            <a class="menu-item active" data-section="productos">
+                <i class="fa-solid fa-box"></i> Productos
+            </a>
+            <a class="menu-item" data-section="comandas">
+                <i class="fa-solid fa-receipt"></i> Comandas
+            </a>
+            <a class="menu-item" data-section="mozos">
+                <i class="fa-solid fa-users"></i> Mozos
+            </a>
+        </nav>
+
+        <button id="logout" class="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i> Salir
+        </button>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="main-header">
+            <h1 id="section-title">Productos</h1>
+        </header>
+
+        <!-- Secciones internas -->
+        <section id="section-productos" class="section visible">
+            <h2>Gestión de Productos</h2>
+
+            <div class="actions">
+                <a href="addProducto.html" class="btn">➕ Agregar producto</a>
+            </div>
+
+            <div id="productos-list">
+                <!-- JS cargará los productos aquí -->
+            </div>
+        </section>
+
+        <section id="section-comandas" class="section">
+            <h2>Historial de Comandas</h2>
+        </section>
+
+        <section id="section-mozos" class="section">
+            <h2>Gestión de usuarios</h2>
+            <div id="mozos-actions">
+
+            </div>
+
+            <div id="mozos-list">
+                <!-- JS cargará aquí -->
+            </div>
+        </section>
+
+        <section id="section-config" class="section">
+            <h2>Configuración del sistema</h2>
+            <p>Preferencias del local.</p>
+        </section>
+
+    </main>
+
+    <div id="global-loader" 
+        style="
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(2px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        ">
+        <div style="
+            padding: 20px 30px;
+            background: white;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        ">
+            Procesando...
+        </div>
+    </div>
+
+    <!-- JS del panel -->
+    <script type="module" src="js/admin/admin.js"></script>
+
+    <!-- Firebase -->
+    <script type="module" src="js/database/firebase_config.js"></script>
+
+</body>
+</html>

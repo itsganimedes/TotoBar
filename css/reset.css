@@ -1,0 +1,92 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+a{
+    text-decoration: none;
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background: #f3f3f3;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+#content {
+    padding: 15px;
+}
+
+.comanda {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.title{
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+.title-2{
+    font-size: 2rem;
+    margin: 1rem 0;
+}
+
+
+.error{
+    padding: 1rem 0;
+    text-align: center;
+    background: #ff6b6b;
+    color: rgb(247, 247, 247);
+    border-radius: 10px;
+}
+
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #222;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 4rem;
+}
+
+footer .footer-btn {
+    color: #fff;
+    font-size: 18px;
+}
+
+footer .footer-btn:hover{
+    cursor: pointer;
+}
+
+@media(max-width: 1050px)
+{
+    .actions{
+        flex-direction: column;
+    }
+}
+
+.oculto{
+    display: none !important;
+}
+
+@media(max-width: 1050px)
+{
+    .oculto_mobile{
+        display: none !important;
+    }
+}

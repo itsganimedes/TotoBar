@@ -1,0 +1,88 @@
+header {
+    background: #222;
+    color: #fff;
+    padding: 1rem 4rem;
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 10rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+}
+
+.header_info{
+    display: flex;
+    flex-direction: column;
+}
+
+.hamburger{
+    width: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    display: none;
+}
+
+.hline{
+    width: 2.5rem;
+    height: 2px;
+    background: #eee;
+}
+
+
+.h_active .hline:nth-child(1) {
+    transform: translateY(12px) rotate(-45deg);
+}
+
+.h_active .hline:nth-child(2) {
+    opacity: 0;
+}
+
+/* La línea 3 gira y se mueve */
+.h_active .hline:nth-child(3) {
+    transform: translateY(-12px) rotate(45deg);
+}
+
+
+/* ACTIONS */
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.actions a{
+    text-decoration: none;
+}
+
+.btn {
+    flex: 1;
+    padding: 15px;
+    background: #0088ff;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+
+.btn:hover {
+    background: #0072d9;
+}
+
+
+@media (max-width: 1050px)
+{
+    .hamburger{
+        display: flex;
+    }
+}

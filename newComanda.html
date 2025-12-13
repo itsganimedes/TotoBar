@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Comanda - Toto Bar</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/comandas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<header>Nueva Comanda</header>
+
+<div class="container">
+
+    <form id="formComanda">
+
+        <!-- Datos generales -->
+        <div class="section" style="text-align: center;">
+            <h3>Datos de la Comanda</h3>
+
+            <p id="mozo" style="margin: 5px 0; font-weight: bold;">Nicolás</p>
+
+            <p id="numeroComanda" name="numeroComanda" style="margin: 5px 0; font-weight: bold;">#</p>
+
+            <p id="fechaHora" name="fechaHora" style="margin: 5px 0; font-weight: bold;">Fecha</p>
+            
+        </div>
+
+        <!-- Mesa -->
+        <div class="section">
+            <h3>Mesa</h3>
+            <select id="mesa" name="mesa">
+                <option value="">Seleccionar mesa</option>
+                <option value="1">Mesa 1</option>
+                <option value="2">Mesa 2</option>
+                <option value="3">Mesa 3</option>
+                <option value="4">Mesa 4</option>
+                <option value="5">Mesa 5</option>
+                <option value="6">Mesa 6</option>
+                <option value="7">Mesa 7</option>
+                <option value="8">Mesa 8</option>
+                <option value="9">Mesa 9</option>
+                <option value="10">Mesa 10</option>
+                <option value="11">Mesa 11</option>
+                <option value="12">Mesa 12</option>
+                <option value="13">Mesa 13</option>
+                <option value="14">Mesa 14</option>
+                <option value="15">Mesa 15</option>
+            </select>
+        </div>
+
+        <!-- Productos -->
+        <div class="section">
+            <h3>Agregar producto</h3>
+
+            <label>Producto</label>
+            <select id="productoSelect">
+                <option value="">Seleccione un producto</option>
+            </select>
+
+            <label>Cantidad</label>
+            <input type="number" id="cantidadProducto" min="1" value="1">
+
+            <div class="btn" id="btnAgregarProducto">Agregar a la comanda</div>
+
+            <h3>Productos agregados</h3>
+            <!-- 🟦 Aquí guardamos los productos como inputs ocultos -->
+            <div id="listaProductos"></div>
+        </div>
+
+        <!-- Forma de pago -->
+        <div class="section">
+            <h3>Forma de pago</h3>
+            <select id="formaPago" name="formaPago">
+                <option value="">Seleccionar</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="tarjeta">Tarjeta</option>
+                <option value="mp">Mercado Pago</option>
+            </select>
+        </div>
+
+        <!-- Total -->
+        <div class="total-box">
+            Total: $<span id="total">0</span>
+            <input type="hidden" id="totalInput" name="total">
+        </div>
+
+        <p class="error oculto"><i class="fa-solid fa-x"></i> Porfavor, completa todos los campos correctamente.</p>
+
+        <div class="section">
+            <button type="submit" class="btn">Guardar Comanda</button>
+            <a href="index.html" class="btn" style="background: #ff3c00;">Volver</a>
+        </div>
+
+    </form>
+
+    <footer>
+        <a class="footer-btn" href="index.html">🏠 Inicio</a>
+        <div class="footer-btn">📋 Órdenes</div>
+        <div class="footer-btn">⚙️ Ajustes</div>
+    </footer>
+
+
+</div>
+
+<div id="global-loader" 
+        style="
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(2px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        ">
+        <div style="
+            padding: 20px 30px;
+            background: white;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        ">
+            Procesando...
+        </div>
+    </div>
+
+<script src="js/general/comandas.js" type="module"></script>
+
+</body>
+</html>

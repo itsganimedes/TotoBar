@@ -1,0 +1,70 @@
+#btnNuevaComanda{
+    position: fixed;
+    bottom: 12%;
+    right: 3%;
+    padding: 1rem 2rem;
+}
+
+@media (max-width: 1050px)
+{
+    #btnNuevaComanda{
+        bottom: 10%;
+        right: 2%;
+    }
+}
+
+
+
+.btn-2 {
+    padding: 0.3rem 2rem;
+    background: #0088ff;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    margin: 1rem 0 0 0;
+}
+
+.btn-2:hover {
+    background: #0072d9;
+}
+
+
+#content{
+    height: 50vw;
+}
+
+
+
+/* ESTILOS PEDIDOS */
+
+#avisosListos {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.aviso-card {
+    padding: 15px 20px;
+    background: #e8ffe6;
+    border-left: 5px solid #28a745;
+    border-radius: 10px;
+    font-family: sans-serif;
+    animation: aparecer 0.3s ease-out;
+}
+
+@keyframes aparecer {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.aviso-content h3 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    font-weight: 700;
+}
