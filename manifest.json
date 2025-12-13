@@ -1,7 +1,7 @@
 {
     "name": "Toto Bar",
     "short_name": "Toto Bar",
-    "start_url": "/",
+    "start_url": "https://itsganimedes.github.io/TotoBar/",
     "display": "standalone",
     "background_color": "#007bff",
     "theme_color": "#007bff",
