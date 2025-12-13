@@ -59,7 +59,7 @@ btn.addEventListener("click", async () => {
         });
 
         // Redirigir
-        window.location.href = "../index.html";
+        window.location.href = "https://itsganimedes.github.io/TotoBar/";
 
     } catch (error) {
         console.error(error);

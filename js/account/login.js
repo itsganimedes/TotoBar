@@ -34,7 +34,7 @@ btnLogin.addEventListener("click", async () => {
         await signInWithEmailAndPassword(auth, email, pass);
 
         // Login OK → Ir al panel
-        window.location.href = "../../index.html";
+        window.location.href = "https://itsganimedes.github.io/TotoBar/";
 
     } catch (error) {
         console.error(error);
