@@ -302,14 +302,19 @@ btnAbrirModal.addEventListener("click", async () => {
 let productosSeleccionados = {}; // {id: {nombre, precio, cantidad}}
 
 // Abrir modal
-btnAbrirModal.addEventListener("click", () => {
+// Abrir modal
+btnAbrirModal.addEventListener("click", async () => {
     modal.classList.remove("oculto");
+    document.body.style.overflow = "hidden";
+    await cargarProductosModal();
 });
 
 // Cerrar modal
 btnCerrarModal.addEventListener("click", () => {
     modal.classList.add("oculto");
+    document.body.style.overflow = "auto";
 });
+
 
 // Cargar productos en el modal
 async function cargarProductosModal() {
