@@ -11,7 +11,7 @@ import {
 const avisos = document.getElementById("avisosListos");
 
 const notificadas = new Set();
-const audio = new Audio("../../sounds/notification.mp3");
+const audio = new Audio("/TotoBar/sounds/notification.mp3");
 audio.volume = 0.8;
 
 // Cache de comandas en memoria
