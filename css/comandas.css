@@ -110,6 +110,9 @@ input, select {
 
 .error{
     width: 80%;
+    position: fixed;
+    bottom: 10%;
+    z-index: 1;
 }
 
 @media (max-width: 1050px)
@@ -123,10 +126,6 @@ input, select {
     }
 
     .total-box{
-        width: 100%;
-    }
-
-    .error{
         width: 100%;
     }
 }

@@ -230,7 +230,11 @@ formComanda.addEventListener("submit", async (e) => {
 
     if (!mesa || !formaPago || productosAgregados.length === 0) {
         let errorp = document.querySelector(".error");
-        errorp.style.display = "block";
+        errorp.classList.remove("oculto");
+        setTimeout(() => {
+            errorp?.classList.add("oculto");
+        }, 3000); // 3000 ms = 3 segundos
+
         return;
     }
 
@@ -271,7 +275,9 @@ formComanda.addEventListener("submit", async (e) => {
         obtenerNumeroComandaActual();
         renderProductos();
         numeroComandaInput.value = numero;
-        document.querySelector(".error").style.display = "none";
+        let errorp = document.querySelector(".error");
+        errorp.classList.add("oculto");
+        return;
 
     } catch (error) {
         console.error(error);
@@ -294,14 +300,8 @@ const btnAbrirModal = document.getElementById("btnAbrirModal");
 const btnCerrarModal = document.getElementById("btnCerrarModal");
 const btnAgregarAlCarrito = document.getElementById("btnAgregarAlCarrito");
 
-btnAbrirModal.addEventListener("click", async () => {
-    modal.classList.remove("oculto");
-    await cargarProductosModal(); // ✅ Esto carga los productos cada vez que abres el modal
-});
-
 let productosSeleccionados = {}; // {id: {nombre, precio, cantidad}}
 
-// Abrir modal
 // Abrir modal
 btnAbrirModal.addEventListener("click", async () => {
     modal.classList.remove("oculto");
@@ -388,4 +388,6 @@ btnAgregarAlCarrito.addEventListener("click", () => {
     productosSeleccionados = {};
     modal.classList.add("oculto");
     document.querySelectorAll("#productosGrid span[id^='cant-']").forEach(span => span.textContent = 0);
+
+    document.body.style.overflow = "auto";
 });

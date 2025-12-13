@@ -9,6 +9,82 @@ import {
     getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { auth } from "../database/firebase_config.js";
+
+
+function bloquearUI() {
+        document.getElementById("global-loader").style.display = "flex";
+        console.log("obtenido");
+
+        // Desactivar todos los botones
+        document.querySelectorAll("button").forEach(btn => {
+            btn.disabled = true;
+        });
+    }
+
+    function desbloquearUI() {
+        document.getElementById("global-loader").style.display = "none";
+
+        // Reactivar botones
+        document.querySelectorAll("button").forEach(btn => {
+            btn.disabled = false;
+        });
+    }
+
+startAuthCheck();
+
+function startAuthCheck() {
+
+    onAuthStateChanged(auth, async (user) => {
+
+        bloquearUI();
+        
+        if (!user) {
+            console.log("No hay usuario logueado. Redirigiendo a index.html.");
+            window.location.href = "index.html";
+            return; // Detiene la ejecución
+        }
+
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            
+            const userDoc = await getDoc(userDocRef);
+
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                const userRole = userData.rol;
+
+                if (userRole === "mozo") {
+                    console.warn("Acceso denegado: Rol insuficiente.");
+                    alert("Acceso denegado. Solo los administradores y cocineros pueden acceder a este panel.");
+                    
+                    window.location.href = "index.html"; // Redirigir si no es admin
+                    return;
+                }
+
+            } else {
+
+                console.error("Documento de usuario no encontrado en Firestore. Acceso denegado.");
+                window.location.href = "index.html";
+            }
+
+        } catch (error) {
+            console.error("Error al obtener el rol del usuario:", error);
+            alert("Error de verificación. Redirigiendo.");
+            window.location.href = "index.html";
+        } finally {
+            desbloquearUI();
+        }
+    });
+}
+
+
+
+
+
+
+
 const lista = document.getElementById("listaComandas");
 
 // Cache en memoria
