@@ -10,6 +10,8 @@ import {
 
 const avisos = document.getElementById("avisosListos");
 
+let primeraVez = false;
+
 const notificadas = new Set();
 const audio = new Audio("/TotoBar/sounds/notification.mp3");
 audio.volume = 0.8;
@@ -29,13 +31,17 @@ onSnapshot(q, (snapshot) => {
     snapshot.forEach((docu) => {
         const data = docu.data();
 
-        if (!notificadas.has(docu.id)) {
-            notificadas.add(docu.id);
+        if (primeraVez)
+        {
 
-            // Sonido y vibración
-            audio.play().catch(() => {});
-            if (navigator.vibrate) {
-                navigator.vibrate([200, 100, 200]);
+            if (!notificadas.has(docu.id)) {
+                notificadas.add(docu.id);
+
+                // Sonido y vibración
+                audio.play().catch(() => {});
+                if (navigator.vibrate) {
+                    navigator.vibrate([200, 100, 200]);
+                }
             }
         }
 
@@ -43,9 +49,12 @@ onSnapshot(q, (snapshot) => {
             id: docu.id,
             ...data
         });
+        
     });
 
     renderAvisos();
+
+    primeraVez = true;
 });
 
 // 🔁 Render UI de avisos

@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     min-height: 50vw;
+    margin: 0 0 4rem 0;
 }
 
 .comanda {
@@ -84,6 +85,7 @@
     position: fixed;
     bottom: 10%;
     width: 100%;
+    z-index: 1;
 }
 
 /* Estados por tiempo */
