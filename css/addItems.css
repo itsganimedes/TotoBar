@@ -110,6 +110,8 @@ input, select {
 
 .error{
     width: 80%;
+    position: fixed;
+    bottom: 10%;
 }
 
 

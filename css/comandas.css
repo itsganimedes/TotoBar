@@ -157,10 +157,27 @@ input, select {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ccc;
+    background: #cce5ff;
 }
 
 .producto-card button {
     width: 30px; height: 30px;
     font-size: 18px;
     margin: 0 5px;
+}
+
+#productosGridBebidas{
+    margin-bottom: 20px;
+}
+
+#productosGridComidas{
+    margin-bottom: 20px;
+}
+
+#productosGridPostres{
+    margin-bottom: 20px;
+}
+
+#productosGridOtros{
+    margin-bottom: 20px;
 }

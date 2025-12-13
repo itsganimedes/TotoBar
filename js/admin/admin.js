@@ -224,12 +224,18 @@ document.querySelector('[data-section="mozos"]').addEventListener("click", carga
 
 async function cargarProductos() {
     const contenedor = document.getElementById("productos-list");
-    contenedor.innerHTML = "<p>Cargando productos...</p>";
+    const contenedorComidas = document.getElementById("productos-list-comidas");
+    const contenedorBebidas = document.getElementById("productos-list-bebidas");
+    const contenedorPostres = document.getElementById("productos-list-postres");
+    const contenedorOtros = document.getElementById("productos-list-otros");
 
     try {
         const snapshot = await getDocs(collection(db, "productos"));
 
-        contenedor.innerHTML = ""; // limpiar
+        contenedorComidas.innerHTML = "<p class='title-2'>Comidas</p>";
+        contenedorBebidas.innerHTML = "<p class='title-2'>Bebidas</p>";
+        contenedorPostres.innerHTML = "<p class='title-2'>Postres</p>";
+        contenedorOtros.innerHTML = "<p class='title-2'>Otros</p>";
 
         if (snapshot.empty) {
             contenedor.innerHTML = "<p>No hay productos cargados.</p>";
@@ -246,6 +252,7 @@ async function cargarProductos() {
                 <div class="prod-info">
                     <h3>${p.nombre}</h3>
                     <div class="prod-desc">
+                        <p>🏷️ Categoría: <b>${p.categoria}</b></p>
                         <p>💲 Precio: <b>$${p.precio}</b></p>
                         <p>📦 Stock: <b>${p.stock}</b></p>
                     </div>
@@ -257,7 +264,19 @@ async function cargarProductos() {
                 </div>
             `;
 
-            contenedor.appendChild(card);
+            if (p.categoria == "bebidas")
+            {
+                contenedorBebidas.appendChild(card);
+            } else if (p.categoria == "comidas")
+            {
+                contenedorComidas.appendChild(card);
+            } else if (p.categoria == "postres")
+            {
+                contenedorPostres.appendChild(card);
+            } else if (p.categoria == "otros")
+            {
+                contenedorOtros.appendChild(card);
+            }
         });
 
         activarBotonesProductos();

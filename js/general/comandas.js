@@ -9,6 +9,7 @@ import {
     updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Ejemplo de cómo se integraría usando Firebase Auth listener
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -210,82 +211,99 @@ function renderProductos() {
 
 
 // =============================================================
-// 4. Guardar comanda en Firestore
+// GUARDAR COMANDA
 // =============================================================
 formComanda.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const numero = parseInt(numeroComandaInput.value); 
-    
-    // Si el input está vacío o no es un número, salimos (solución al NaN)
-    if (isNaN(numero) || numero < 1) { 
-        console.error("Número de comanda inválido: ", numero);
-        alert("Error: El número de comanda es inválido. Intenta recargar la página.");
+    const numero = parseInt(numeroComandaInput.value);
+    if (isNaN(numero) || numero < 1) {
+        alert("Número de comanda inválido");
         return;
     }
 
-    const mesa = document.getElementById("mesa").value;
-    const formaPago = document.getElementById("formaPago").value;
+    const mesaId = document.getElementById("mesa").value;
     const mozo = document.getElementById("mozo").textContent.trim();
 
-    if (!mesa || !formaPago || productosAgregados.length === 0) {
-        let errorp = document.querySelector(".error");
+    if (!mesaId || productosAgregados.length === 0) {
+        const errorp = document.querySelector(".error");
         errorp.classList.remove("oculto");
-        setTimeout(() => {
-            errorp?.classList.add("oculto");
-        }, 3000); // 3000 ms = 3 segundos
-
+        setTimeout(() => errorp.classList.add("oculto"), 3000);
         return;
     }
 
     bloquearUI();
 
     try {
+        const mesaRef = doc(db, "mesas", mesaId);
+        const mesaSnap = await getDoc(mesaRef);
+
+        if (!mesaSnap.exists()) {
+            alert("Mesa inexistente");
+            return;
+        }
+
+        const mesaData = mesaSnap.data();
+
+        // 🚫 Si la mesa está cerrada → se abre automáticamente
+        if (mesaData.estado === "cerrada") {
+            await updateDoc(mesaRef, {
+                estado: "abierta",
+                mozo,
+                total: 0,
+                productos: [],
+                abiertaEn: serverTimestamp()
+            });
+        }
+
+        // 🧾 Guardar comanda
         await addDoc(collection(db, "comandas"), {
             numero,
-            mesa,
+            mesa: mesaData.numero,
             mozo,
-            formaPago,
             productos: productosAgregados,
             total,
             estado: "pendiente",
             fecha: serverTimestamp()
         });
 
-        // Actualizar stock
-        for (let p of productosAgregados) {
+        // ➕ Sumar a la mesa
+        await updateDoc(mesaRef, {
+            productos: arrayUnion(...productosAgregados),
+            total: (mesaData.total || 0) + total,
+            ultimaActualizacion: serverTimestamp()
+        });
+
+        // 📦 Actualizar stock
+        for (const p of productosAgregados) {
             const ref = doc(db, "productos", p.id);
             const snap = await getDoc(ref);
-
             if (snap.exists()) {
-                const stockActual = snap.data().stock;
                 await updateDoc(ref, {
-                    stock: stockActual - p.cantidad
+                    stock: snap.data().stock - p.cantidad
                 });
             }
         }
 
         await incrementarNumeroComanda(numero);
 
-        alert("Comanda guardada!");
+        // 🔄 Reset UI
+        alert("Comanda guardada");
         formComanda.reset();
         productosAgregados = [];
         total = 0;
         totalSpan.textContent = 0;
         obtenerNumeroComandaActual();
         renderProductos();
-        numeroComandaInput.value = numero;
-        let errorp = document.querySelector(".error");
-        errorp.classList.add("oculto");
-        return;
 
-    } catch (error) {
-        console.error(error);
-        alert("Error al guardar la comanda");
+    } catch (err) {
+        console.error(err);
+        alert("Error al guardar comanda");
     } finally {
         desbloquearUI();
     }
 });
+
 
 function calcularTotal(arr) {
     return arr.reduce((acc, item) => acc + item.subtotal, 0);
@@ -295,7 +313,12 @@ function calcularTotal(arr) {
 
 
 const modal = document.getElementById("modalProductos");
-const productosGrid = document.getElementById("productosGrid");
+
+const productosGridComidas = document.getElementById("productosGridComidas");
+const productosGridBebidas = document.getElementById("productosGridBebidas");
+const productosGridPostres = document.getElementById("productosGridPostres");
+const productosGridOtros = document.getElementById("productosGridOtros");
+
 const btnAbrirModal = document.getElementById("btnAbrirModal");
 const btnCerrarModal = document.getElementById("btnCerrarModal");
 const btnAgregarAlCarrito = document.getElementById("btnAgregarAlCarrito");
@@ -318,8 +341,12 @@ btnCerrarModal.addEventListener("click", () => {
 
 // Cargar productos en el modal
 async function cargarProductosModal() {
-    productosGrid.innerHTML = "";
     const querySnapshot = await getDocs(collection(db, "productos"));
+
+    productosGridComidas.innerHTML = "<p style='border-bottom: 1px solid #ff3c00; padding-bottom: 0.5rem;'>🍔 Comidas</p>";
+    productosGridBebidas.innerHTML = "<p style='border-bottom: 1px solid #ff3c00; padding-bottom: 0.5rem;'>🍹 Bebidas</p>";
+    productosGridPostres.innerHTML = "<p style='border-bottom: 1px solid #ff3c00; padding-bottom: 0.5rem;'>🥞 Postres</p>";
+    productosGridOtros.innerHTML = "<p style='border-bottom: 1px solid #ff3c00; padding-bottom: 0.5rem;'>🍱 Otros</p>";  
     
     querySnapshot.forEach(docu => {
         const data = docu.data();
@@ -335,7 +362,12 @@ async function cargarProductosModal() {
             </div>
         `;
         
-        productosGrid.appendChild(card);
+        
+
+        if (data.categoria == "bebidas") { productosGridBebidas.appendChild(card); }
+        if (data.categoria == "comidas") { productosGridComidas.appendChild(card); }
+        if (data.categoria == "postres") { productosGridPostres.appendChild(card); }
+        if (data.categoria == "otros") { productosGridOtros.appendChild(card); }
     });
 
     // Eventos de botones + y -

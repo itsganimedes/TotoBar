@@ -15,7 +15,10 @@
     <div id="modalProductos" class="modal oculto">
         <div class="modal-content">
             <h3>Selecciona Productos</h3>
-            <div id="productosGrid"></div>
+            <div id="productosGridComidas"></div>
+            <div id="productosGridBebidas"></div>
+            <div id="productosGridPostres"></div>
+            <div id="productosGridOtros"></div>
             <div style="margin-top: 15px; text-align: right;">
                 <button id="btnAgregarAlCarrito" class="btn">Agregar al carrito</button>
                 <button id="btnCerrarModal" class="btn" style="background:#ff3c00;">Cerrar</button>
@@ -92,17 +95,6 @@
             <div id="listaProductos"></div>
         </div>
 
-        <!-- Forma de pago -->
-        <div class="section">
-            <h3>Forma de pago</h3>
-            <select id="formaPago" name="formaPago">
-                <option value="">Seleccionar</option>
-                <option value="efectivo">Efectivo</option>
-                <option value="tarjeta">Tarjeta</option>
-                <option value="mp">Mercado Pago</option>
-            </select>
-        </div>
-
         <!-- Total -->
         <div class="total-box">
             Total: $<span id="total">0</span>
@@ -120,6 +112,7 @@
 
     <footer>
         <a class="footer-btn" href="index.html">🏠 Inicio</a>
+        <a class="footer-btn" href="mesas.html">🪑 Mesas</a>
         <a class="footer-btn" href="historial.html">📋 Historial</a>
     </footer>
 

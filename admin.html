@@ -20,8 +20,8 @@
             <a class="menu-item active" data-section="productos">
                 <i class="fa-solid fa-box"></i> Productos
             </a>
-            <a class="menu-item" data-section="comandas">
-                <i class="fa-solid fa-receipt"></i> Comandas
+            <a class="menu-item" data-section="estadisticas">
+                <i class="fa-solid fa-receipt"></i> Estadísticas
             </a>
             <a class="menu-item" data-section="mozos">
                 <i class="fa-solid fa-users"></i> Mozos
@@ -51,11 +51,89 @@
 
             <div id="productos-list">
                 <!-- JS cargará los productos aquí -->
+                
+            </div>
+
+            <div id="productos-list-comidas">
+                
+            </div>
+
+            <div id="productos-list-bebidas">
+                
+            </div>
+
+            <div id="productos-list-postres">
+                
+            </div>
+
+            <div id="productos-list-otros">
+                
             </div>
         </section>
 
-        <section id="section-comandas" class="section">
-            <h2>Historial de Comandas</h2>
+        <section id="section-estadisticas" class="section">
+            <h2>Estadísticas</h2>
+
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <span>Total facturado</span>
+                    <strong id="stat-total">$0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Mesas cerradas</span>
+                    <strong id="stat-mesas">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Ticket promedio</span>
+                    <strong id="stat-promedio">$0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Forma de pago top</span>
+                    <strong id="stat-pago">–</strong>
+                </div>
+
+            </div>
+
+            <h3 style="margin: 20px 0 10px;">Facturación por medio de pago</h3>
+
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <span>💵 Efectivo</span>
+                        <strong id="pago-efectivo">$0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>💳 Débito</span>
+                        <strong id="pago-debito">$0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>💳 Crédito</span>
+                        <strong id="pago-credito">$0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>📱 Mercado Pago</span>
+                        <strong id="pago-mercadopago">$0</strong>
+                    </div>
+                </div>
+
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Mesa</th>
+                        <th>Mozo</th>
+                        <th>Pago</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="stats-list"></tbody>
+            </table>
+
         </section>
 
         <section id="section-mozos" class="section">
@@ -67,11 +145,6 @@
             <div id="mozos-list">
                 <!-- JS cargará aquí -->
             </div>
-        </section>
-
-        <section id="section-config" class="section">
-            <h2>Configuración del sistema</h2>
-            <p>Preferencias del local.</p>
         </section>
 
     </main>
@@ -101,6 +174,8 @@
 
     <!-- JS del panel -->
     <script type="module" src="js/admin/admin.js"></script>
+
+    <script type="module" src="js/admin/adminEstadisticas.js"></script>
 
     <!-- Firebase -->
     <script type="module" src="js/database/firebase_config.js"></script>
