@@ -191,7 +191,7 @@ function renderProductos() {
         const div = document.createElement("div");
         div.classList.add("producto-item");
         div.innerHTML = `
-            <p>${p.nombre} x${p.cantidad} — $${p.subtotal}</p>
+            <p>✔ ${p.nombre} x${p.cantidad} — $${p.subtotal}</p>
             <button data-index="${index}" class="btn-remove">❌</button>
         `;
         listaProductosDiv.appendChild(div);
@@ -284,3 +284,103 @@ formComanda.addEventListener("submit", async (e) => {
 function calcularTotal(arr) {
     return arr.reduce((acc, item) => acc + item.subtotal, 0);
 }
+
+
+
+
+const modal = document.getElementById("modalProductos");
+const productosGrid = document.getElementById("productosGrid");
+const btnAbrirModal = document.getElementById("btnAbrirModal");
+const btnCerrarModal = document.getElementById("btnCerrarModal");
+const btnAgregarAlCarrito = document.getElementById("btnAgregarAlCarrito");
+
+btnAbrirModal.addEventListener("click", async () => {
+    modal.classList.remove("oculto");
+    await cargarProductosModal(); // ✅ Esto carga los productos cada vez que abres el modal
+});
+
+let productosSeleccionados = {}; // {id: {nombre, precio, cantidad}}
+
+// Abrir modal
+btnAbrirModal.addEventListener("click", () => {
+    modal.classList.remove("oculto");
+});
+
+// Cerrar modal
+btnCerrarModal.addEventListener("click", () => {
+    modal.classList.add("oculto");
+});
+
+// Cargar productos en el modal
+async function cargarProductosModal() {
+    productosGrid.innerHTML = "";
+    const querySnapshot = await getDocs(collection(db, "productos"));
+    
+    querySnapshot.forEach(docu => {
+        const data = docu.data();
+        const card = document.createElement("div");
+        card.classList.add("producto-card");
+        
+        card.innerHTML = `
+            <span>${data.nombre} ($${data.precio})</span>
+            <div>
+                <button class="menos" data-id="${docu.id}">-</button>
+                <span id="cant-${docu.id}">0</span>
+                <button class="mas" data-id="${docu.id}" data-nombre="${data.nombre}" data-precio="${data.precio}">+</button>
+            </div>
+        `;
+        
+        productosGrid.appendChild(card);
+    });
+
+    // Eventos de botones + y -
+    document.querySelectorAll(".mas").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            const nombre = btn.dataset.nombre;
+            const precio = parseInt(btn.dataset.precio);
+
+            if (!productosSeleccionados[id]) {
+                productosSeleccionados[id] = {nombre, precio, cantidad: 0};
+            }
+
+            productosSeleccionados[id].cantidad++;
+            document.getElementById(`cant-${id}`).textContent = productosSeleccionados[id].cantidad;
+        });
+    });
+
+    document.querySelectorAll(".menos").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            if (productosSeleccionados[id] && productosSeleccionados[id].cantidad > 0) {
+                productosSeleccionados[id].cantidad--;
+                document.getElementById(`cant-${id}`).textContent = productosSeleccionados[id].cantidad;
+            }
+        });
+    });
+}
+
+// Agregar al carrito
+btnAgregarAlCarrito.addEventListener("click", () => {
+    for (let id in productosSeleccionados) {
+        const p = productosSeleccionados[id];
+        if (p.cantidad > 0) {
+            productosAgregados.push({
+                id,
+                nombre: p.nombre,
+                precio: p.precio,
+                cantidad: p.cantidad,
+                subtotal: p.precio * p.cantidad
+            });
+        }
+    }
+
+    total = calcularTotal(productosAgregados);
+    totalSpan.textContent = total;
+    renderProductos();
+
+    // Limpiar selección y cerrar modal
+    productosSeleccionados = {};
+    modal.classList.add("oculto");
+    document.querySelectorAll("#productosGrid span[id^='cant-']").forEach(span => span.textContent = 0);
+});

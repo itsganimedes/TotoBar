@@ -11,6 +11,19 @@
 
 <body>
 
+    <!-- Modal productos -->
+    <div id="modalProductos" class="modal oculto">
+        <div class="modal-content">
+            <h3>Selecciona Productos</h3>
+            <div id="productosGrid"></div>
+            <div style="margin-top: 15px; text-align: right;">
+                <button id="btnAgregarAlCarrito" class="btn">Agregar al carrito</button>
+                <button id="btnCerrarModal" class="btn" style="background:#ff3c00;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+
 <header>Nueva Comanda</header>
 
 <div class="container">
@@ -52,9 +65,14 @@
             </select>
         </div>
 
+        <div class="section">
+            <h3>Agregar productos</h3>
+            <div class="btn" id="btnAbrirModal">Agregar productos</div>
+        </div>
+
         <!-- Productos -->
         <div class="section">
-            <h3>Agregar producto</h3>
+            <h3>Agregar productos (manual)</h3>
 
             <label>Producto</label>
             <select id="productoSelect">
@@ -66,8 +84,11 @@
 
             <div class="btn" id="btnAgregarProducto">Agregar a la comanda</div>
 
+            
+        </div>
+
+        <div class="section">
             <h3>Productos agregados</h3>
-            <!-- 🟦 Aquí guardamos los productos como inputs ocultos -->
             <div id="listaProductos"></div>
         </div>
 
