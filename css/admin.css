@@ -66,7 +66,7 @@ body {
 }
 
 .producto-card:hover{
-    border: 1px solid #1e88e5;
+    transform: translateY(-0.2rem);
 }
 
 .prod-buttons{
