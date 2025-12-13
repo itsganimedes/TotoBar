@@ -274,7 +274,7 @@ function activarBotonesProductos() {
         btn.addEventListener("click", () => {
             const id = btn.dataset.id;
             // Redirigir a página de edición (si querés)
-            window.location.href = `editProducto.html?id=${id}`;
+            window.location.href = `/TotoBar/editProducto.html?id=${id}`;
         });
     });
 
