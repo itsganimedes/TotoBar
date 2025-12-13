@@ -5,7 +5,3 @@ hamburger.addEventListener("click", () => {
     actions.classList.toggle("oculto_mobile");
     hamburger.classList.toggle("h_active");
 })
-
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/service-worker.js");
-}
