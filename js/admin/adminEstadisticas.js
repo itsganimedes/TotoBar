@@ -14,7 +14,7 @@ const statMesas = document.getElementById("stat-mesas");
 const statPromedio = document.getElementById("stat-promedio");
 const statPago = document.getElementById("stat-pago");
 
-const pagoEfectivo = document.getElementById("pago-efectivo");
+const pagoEfectivo = document.getElementById("pago-Efectivo");
 const pagoDebito = document.getElementById("pago-debito");
 const pagoCredito = document.getElementById("pago-credito");
 const pagoMP = document.getElementById("pago-mercadopago");
@@ -31,7 +31,7 @@ onSnapshot(q, snap => {
     let totalFacturado = 0;
     let mesas = 0;
     let pagos = {
-        efectivo: 0,
+        Efectivo: 0,
         debito: 0,
         credito: 0,
         mercadopago: 0
@@ -71,7 +71,7 @@ onSnapshot(q, snap => {
 
     statPago.textContent = topPago ? topPago[0] : "–";
 
-    pagoEfectivo.textContent = `$${pagos.efectivo}`;
+    pagoEfectivo.textContent = `$${pagos.Efectivo}`;
     pagoDebito.textContent = `$${pagos.debito}`;
     pagoCredito.textContent = `$${pagos.credito}`;
     pagoMP.textContent = `$${pagos.mercadopago}`;
