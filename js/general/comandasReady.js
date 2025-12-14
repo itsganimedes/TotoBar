@@ -10,6 +10,25 @@ import {
 
 const avisos = document.getElementById("avisosListos");
 
+function bloquearUI() {
+        document.getElementById("global-loader").style.display = "flex";
+        console.log("obtenido");
+
+        // Desactivar todos los botones
+        document.querySelectorAll("button").forEach(btn => {
+            btn.disabled = true;
+        });
+    }
+
+    function desbloquearUI() {
+        document.getElementById("global-loader").style.display = "none";
+
+        // Reactivar botones
+        document.querySelectorAll("button").forEach(btn => {
+            btn.disabled = false;
+        });
+    }
+
 let primeraVez = false;
 
 const notificadas = new Set();
@@ -90,6 +109,8 @@ function activarBotonesFinalizar() {
             const ok = confirm("¿Confirmar que la orden fue retirada de cocina?");
             if (!ok) return;
 
+            bloquearUI();
+
             try {
                 await updateDoc(doc(db, "comandas", id), {
                     estado: "entregado"
@@ -97,6 +118,8 @@ function activarBotonesFinalizar() {
             } catch (err) {
                 console.error("Error al finalizar comanda:", err);
                 alert("No se pudo finalizar la orden.");
+            } finally {
+                desbloquearUI();
             }
         };
     });
