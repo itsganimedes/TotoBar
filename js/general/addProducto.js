@@ -52,7 +52,7 @@ form.addEventListener("submit", async (e) => {
                 stock,
                 precio,
                 estado: 'Disponible', 
-                creado: serverTimestamp(),
+                creado: serverTimestamp()
             });
 
             alert("Producto añadido correctamente!");

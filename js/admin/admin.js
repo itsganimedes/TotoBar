@@ -13,6 +13,9 @@ import {
 import { db } from "../database/firebase_config.js";
 
 
+let mesasTotal = 15;
+
+
 
 const menuItems = document.querySelectorAll(".menu-item");
 const sections = document.querySelectorAll(".section");
@@ -253,6 +256,7 @@ async function cargarProductos() {
                     <h3>${p.nombre}</h3>
                     <div class="prod-desc">
                         <p>🏷️ Categoría: <b>${p.categoria}</b></p>
+                        <p>🟢 Estado: <b>${p.estado}</b></p>
                         <p>💲 Precio: <b>$${p.precio}</b></p>
                         <p>📦 Stock: <b>${p.stock}</b></p>
                     </div>
@@ -260,6 +264,7 @@ async function cargarProductos() {
 
                 <div class="prod-buttons">
                     <button class="btn-edit-producto" data-id="${docu.id}">Editar</button>
+                    <button class="btn-estado" data-id="${docu.id}">Estado</button>
                     <button class="btn-delete-producto" data-id="${docu.id}">Eliminar</button>
                 </div>
             `;
@@ -297,6 +302,15 @@ function activarBotonesProductos() {
         });
     });
 
+    // Estado
+    document.querySelectorAll(".btn-estado").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            alternarEstadoProducto(id);
+        });
+    });
+
+
     // Borrar
     document.querySelectorAll(".btn-delete-producto").forEach(btn => {
         btn.addEventListener("click", async () => {
@@ -309,6 +323,93 @@ function activarBotonesProductos() {
         });
     });
 }
+
+async function alternarEstadoProducto(productoId) {
+    bloquearUI();
+    try {
+        const productoRef = doc(db, "productos", productoId);
+        const snap = await getDoc(productoRef);
+
+        if (!snap.exists()) {
+            alert("Producto no encontrado");
+            return;
+        }
+
+        const producto = snap.data();
+
+        const nuevoEstado =
+            producto.estado === "Disponible"
+                ? "No disponible"
+                : "Disponible";
+
+        await updateDoc(productoRef, {
+            estado: nuevoEstado
+        });
+
+        console.log(`Estado cambiado a: ${nuevoEstado}`);
+
+        // 👉 Opcional: refrescar lista
+        cargarProductos();
+
+    } catch (error) {
+        console.error("Error al cambiar estado:", error);
+        alert("Error al cambiar el estado del producto");
+    } finally {
+        desbloquearUI();
+    }
+}
+
+const btnEliminarComandas = document.getElementById("eliminar-comandas");
+
+btnEliminarComandas.addEventListener("click", async () => {
+
+    const confirmar = confirm(
+        "⚠️ ATENCIÓN\n\nEsto restaurará TODO el sistema:\n- Se eliminarán todas las comandas\n- Se cerrarán todas las mesas\n- El contador volverá a 0\n\n¿Continuar?"
+    );
+
+    if (!confirmar) return;
+
+    const confirmar2 = confirm("Última confirmación. ¿Seguro?");
+    if (!confirmar2) return;
+
+    bloquearUI();
+
+    try {
+        // 🧾 1️⃣ Eliminar comandas
+        const snap = await getDocs(collection(db, "comandas"));
+
+        for (const d of snap.docs) {
+            await deleteDoc(doc(db, "comandas", d.id));
+        }
+
+        // 🪑 2️⃣ Resetear mesas (UPDATE, no create)
+        for (let i = 1; i <= mesasTotal; i++) {
+            await updateDoc(doc(db, "mesas", String(i)), {
+                estado: "cerrada",
+                total: 0,
+                productos: [],
+                mozo: null,
+                formaPago: null,
+                cerradaEn: null
+            });
+        }
+
+        // 🔢 3️⃣ Reset contador de comandas
+        await updateDoc(
+            doc(db, "config", "contadorComandas"),
+            { ultimo: 0 }
+        );
+
+        alert("✅ Sistema restaurado correctamente");
+
+    } catch (error) {
+        console.error(error);
+        alert("❌ Error al restaurar el sistema");
+    } finally {
+        desbloquearUI();
+    }
+});
+
 
 document.querySelector('[data-section="productos"]').addEventListener("click", cargarProductos);
 

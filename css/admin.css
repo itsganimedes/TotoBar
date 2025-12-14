@@ -93,6 +93,11 @@ body {
     color: white;
 }
 
+.btn-estado{
+    background: #ac7ec2;
+    color: white;
+}
+
 .btn-delete-producto {
     background: #c62828;
     color: white;
@@ -105,6 +110,8 @@ body {
 .prod-buttons button {
     margin-left: 10px;
 }
+
+
 
 @media (max-width: 1000px)
 {
@@ -283,6 +290,18 @@ body {
     background: #0072d9;
 }
 
+.btn-danger{
+    flex: 1;
+    padding: 15px;
+    background: #ff1e00;
+    color: #eeea18;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
 
 
 

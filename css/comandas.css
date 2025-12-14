@@ -181,3 +181,15 @@ input, select {
 #productosGridOtros{
     margin-bottom: 20px;
 }
+
+.producto-card.no-disponible {
+    opacity: 0.5;
+}
+
+.producto-card.no-disponible span {
+    text-decoration: line-through;
+}
+
+.producto-card.no-disponible button {
+    cursor: not-allowed;
+}

@@ -103,15 +103,25 @@ function bloquearUI() {
 async function cargarProductos() {
     const querySnapshot = await getDocs(collection(db, "productos"));
 
+    productoSelect.innerHTML = "";
+
     querySnapshot.forEach((docu) => {
         const data = docu.data();
         const option = document.createElement("option");
+
         option.value = docu.id;
         option.textContent = `${data.nombre} ($${data.precio})`;
         option.dataset.precio = data.precio;
+
+        if (data.estado === "No disponible") {
+            option.disabled = true;
+            option.textContent += " — No disponible";
+        }
+
         productoSelect.appendChild(option);
     });
 }
+
 
 // =============================================================
 // 2. Obtener número de comanda autoincremental
@@ -256,6 +266,37 @@ formComanda.addEventListener("submit", async (e) => {
             });
         }
 
+        // ================================
+        // VALIDACIÓN BACKEND DE PRODUCTOS
+        // ================================
+        for (const p of productosAgregados) {
+            const productoRef = doc(db, "productos", p.id);
+            const productoSnap = await getDoc(productoRef);
+
+            if (!productoSnap.exists()) {
+                alert(`El producto "${p.nombre}" no existe`);
+                desbloquearUI();
+                return;
+            }
+
+            const productoData = productoSnap.data();
+
+            // 🚫 Producto no disponible
+            if (productoData.estado === "No disponible") {
+                alert(`"${productoData.nombre}" no está disponible`);
+                desbloquearUI();
+                return;
+            }
+
+            // 🚫 Stock insuficiente COMENTADO PARA NO MOLESTAR CON STOCK 
+            // if (productoData.stock < p.cantidad) {
+            //     alert(`Stock insuficiente de "${productoData.nombre}"`);
+            //     desbloquearUI();
+            //     return;
+            // }
+        }
+
+
         // 🧾 Guardar comanda
         await addDoc(collection(db, "comandas"), {
             numero,
@@ -351,16 +392,37 @@ async function cargarProductosModal() {
     querySnapshot.forEach(docu => {
         const data = docu.data();
         const card = document.createElement("div");
+        const noDisponible = data.estado === "No disponible";
         card.classList.add("producto-card");
+
+        card.classList.toggle("no-disponible", noDisponible);
         
         card.innerHTML = `
-            <span>${data.nombre} ($${data.precio})</span>
+            <span style="
+                ${noDisponible ? "text-decoration: line-through; color: #999;" : ""}
+            ">
+                ${data.nombre} ($${data.precio})
+            </span>
+
             <div>
-                <button class="menos" data-id="${docu.id}">-</button>
+                <button 
+                    class="menos" 
+                    data-id="${docu.id}"
+                    ${noDisponible ? "disabled" : ""}
+                >-</button>
+
                 <span id="cant-${docu.id}">0</span>
-                <button class="mas" data-id="${docu.id}" data-nombre="${data.nombre}" data-precio="${data.precio}">+</button>
+
+                <button 
+                    class="mas" 
+                    data-id="${docu.id}" 
+                    data-nombre="${data.nombre}" 
+                    data-precio="${data.precio}"
+                    ${noDisponible ? "disabled" : ""}
+                >+</button>
             </div>
         `;
+
         
         
 
@@ -373,6 +435,9 @@ async function cargarProductosModal() {
     // Eventos de botones + y -
     document.querySelectorAll(".mas").forEach(btn => {
         btn.addEventListener("click", () => {
+
+            if (btn.disabled) return;
+
             const id = btn.dataset.id;
             const nombre = btn.dataset.nombre;
             const precio = parseInt(btn.dataset.precio);
@@ -388,6 +453,7 @@ async function cargarProductosModal() {
 
     document.querySelectorAll(".menos").forEach(btn => {
         btn.addEventListener("click", () => {
+            if (btn.disabled) return;
             const id = btn.dataset.id;
             if (productosSeleccionados[id] && productosSeleccionados[id].cantidad > 0) {
                 productosSeleccionados[id].cantidad--;
