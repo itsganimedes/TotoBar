@@ -26,5 +26,13 @@
     </div>
 
     <script type="module" src="js/account/login.js"></script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/TotoBar/service-worker.js")
+            .then(() => console.log("✅ Service Worker registrado"))
+            .catch(err => console.error("❌ SW error:", err));
+        }
+    </script>
 </body>
 </html>
