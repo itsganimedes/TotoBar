@@ -5,7 +5,9 @@ import { onSnapshot,
     addDoc,
     serverTimestamp,
     updateDoc,
-    doc 
+    doc, 
+    writeBatch, 
+    increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { db } from "../database/firebase_config.js";
 import { auth } from "../database/firebase_config.js";
@@ -14,6 +16,26 @@ const contenedor = document.getElementById("listaMesas");
 
 let mesaSeleccionadaId = null;
 let mesaSeleccionadaData = null;
+
+function bloquearUI() {
+        document.getElementById("global-loader").style.display = "flex";
+        console.log("obtenido");
+
+        // Desactivar todos los botones
+        document.querySelectorAll("button").forEach(btn => {
+            btn.disabled = true;
+        });
+    }
+
+    function desbloquearUI() {
+        document.getElementById("global-loader").style.display = "none";
+
+        // Reactivar botones
+        document.querySelectorAll("button").forEach(btn => {
+            btn.disabled = false;
+        });
+    }
+
 
 const exito = document.querySelector(".exito");
 
@@ -78,27 +100,44 @@ function cerrarModalPago() {
     document.body.style.overflow = "auto";
 }
 
+
+
 async function confirmarPago() {
     const formaPago = document.getElementById("formaPagoSelect").value;
     if (!formaPago) {
         document.querySelector(".error").classList.remove("oculto");
         setTimeout(() => {
-                document.querySelector(".error").classList.add("oculto");
-            }, 3000);
+            document.querySelector(".error").classList.add("oculto");
+        }, 3000);
         return;
     }
 
+    bloquearUI();
+
     try {
-        // 1️⃣ Guardar estadística
-        await addDoc(collection(db, "estadisticas"), {
+        const batch = writeBatch(db);
+
+        // referencia estadística
+        const statRef = doc(collection(db, "estadisticas"));
+
+        batch.set(statRef, {
             mesa: mesaSeleccionadaData.numero,
             total: mesaSeleccionadaData.total,
             formaPago,
-            mozo: mesaSeleccionadaData.mozo ?? null, 
+            mozo: mesaSeleccionadaData.mozo ?? null,
             fecha: serverTimestamp()
         });
 
-        await updateDoc(doc(db, "mesas", mesaSeleccionadaId), {
+        // 📈 estadísticas GENERALES
+        const genRef = doc(db, "estadisticas_generales", "resumen");
+        batch.update(genRef, {
+            totalFacturado: increment(mesaSeleccionadaData.total),
+            mesasCerradas: increment(1),
+            [`pagos.${formaPago}`]: increment(mesaSeleccionadaData.total)
+        });
+
+        // cerrar mesa
+        batch.update(doc(db, "mesas", mesaSeleccionadaId), {
             estado: "cerrada",
             formaPago,
             cerradaEn: serverTimestamp(),
@@ -107,14 +146,16 @@ async function confirmarPago() {
             mozo: null
         });
 
+        await batch.commit();
+
         cerrarModalPago();
-
         mostrarExito();
-
 
     } catch (error) {
         console.error(error);
         alert("Error al finalizar la mesa");
+    } finally {
+        desbloquearUI();
     }
 }
 

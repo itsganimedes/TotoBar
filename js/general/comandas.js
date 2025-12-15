@@ -156,43 +156,43 @@ async function incrementarNumeroComanda(numeroActual) {
     return nuevoNumero;
 }
 
-// =============================================================
-// 3. Agregar productos a la comanda
-// =============================================================
-document.getElementById("btnAgregarProducto").addEventListener("click", () => {
+// // =============================================================
+// // 3. Agregar productos a la comanda
+// // =============================================================
+// document.getElementById("btnAgregarProducto").addEventListener("click", () => {
 
-    bloquearUI();
+//     bloquearUI();
 
-    try{
-        const idProd = productoSelect.value;
-        if (!idProd) return alert("Selecciona un producto");
+//     try{
+//         const idProd = productoSelect.value;
+//         if (!idProd) return alert("Selecciona un producto");
 
-        const precio = parseInt(
-            productoSelect.options[productoSelect.selectedIndex].dataset.precio
-        );
+//         const precio = parseInt(
+//             productoSelect.options[productoSelect.selectedIndex].dataset.precio
+//         );
 
-        const nombre = productoSelect.options[productoSelect.selectedIndex].textContent;
-        const cantidad = parseInt(cantidadInput.value);
-        const subtotal = precio * cantidad;
+//         const nombre = productoSelect.options[productoSelect.selectedIndex].textContent;
+//         const cantidad = parseInt(cantidadInput.value);
+//         const subtotal = precio * cantidad;
 
-        productosAgregados.push({
-            id: idProd,
-            nombre,
-            precio,
-            cantidad,
-            subtotal
-        });
+//         productosAgregados.push({
+//             id: idProd,
+//             nombre,
+//             precio,
+//             cantidad,
+//             subtotal
+//         });
 
-        total += subtotal;
-        totalSpan.textContent = total;
+//         total += subtotal;
+//         totalSpan.textContent = total;
 
-        renderProductos();
-    } catch (error) {
-        console.log("Error: " + error)
-    } finally {
-        desbloquearUI();
-    }
-});
+//         renderProductos();
+//     } catch (error) {
+//         console.log("Error: " + error)
+//     } finally {
+//         desbloquearUI();
+//     }
+// });
 
 // Renderizar la lista
 function renderProductos() {

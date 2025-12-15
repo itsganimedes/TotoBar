@@ -8,7 +8,8 @@ import {
     deleteDoc,
     getDocs,
     getDoc,
-    doc
+    doc,
+    setDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { db } from "../database/firebase_config.js";
 
@@ -364,25 +365,28 @@ const btnEliminarComandas = document.getElementById("eliminar-comandas");
 btnEliminarComandas.addEventListener("click", async () => {
 
     const confirmar = confirm(
-        "⚠️ ATENCIÓN\n\nEsto restaurará TODO el sistema:\n- Se eliminarán todas las comandas\n- Se cerrarán todas las mesas\n- El contador volverá a 0\n\n¿Continuar?"
+        "⚠️ ATENCIÓN\n\nEsto restaurará TODO el sistema:\n- Comandas\n- Estadísticas del día\n- Mesas\n- Contador\n\n¿Continuar?"
     );
 
     if (!confirmar) return;
-
-    const confirmar2 = confirm("Última confirmación. ¿Seguro?");
-    if (!confirmar2) return;
+    if (!confirm("Última confirmación")) return;
 
     bloquearUI();
 
     try {
-        // 🧾 1️⃣ Eliminar comandas
-        const snap = await getDocs(collection(db, "comandas"));
-
-        for (const d of snap.docs) {
+        // 🧾 Eliminar comandas
+        const comandasSnap = await getDocs(collection(db, "comandas"));
+        for (const d of comandasSnap.docs) {
             await deleteDoc(doc(db, "comandas", d.id));
         }
 
-        // 🪑 2️⃣ Resetear mesas (UPDATE, no create)
+        // 📊 Eliminar estadísticas del día
+        const estadSnap = await getDocs(collection(db, "estadisticas"));
+        for (const d of estadSnap.docs) {
+            await deleteDoc(doc(db, "estadisticas", d.id));
+        }
+
+        // 🪑 Resetear mesas
         for (let i = 1; i <= mesasTotal; i++) {
             await updateDoc(doc(db, "mesas", String(i)), {
                 estado: "cerrada",
@@ -394,21 +398,67 @@ btnEliminarComandas.addEventListener("click", async () => {
             });
         }
 
-        // 🔢 3️⃣ Reset contador de comandas
+        // 🔢 Reset contador
         await updateDoc(
             doc(db, "config", "contadorComandas"),
             { ultimo: 0 }
         );
 
-        alert("✅ Sistema restaurado correctamente");
+        alert("✅ Sistema restaurado completamente");
 
     } catch (error) {
         console.error(error);
-        alert("❌ Error al restaurar el sistema");
+        alert("❌ Error al restaurar sistema");
     } finally {
         desbloquearUI();
     }
 });
+
+
+
+
+/* REINICIAR GENERALES */
+
+const btnEliminarGenerales = document.getElementById("eliminar-stats-generales");
+
+btnEliminarGenerales.addEventListener("click", async () => {
+    reiniciarEstadisticasGenerales();
+});
+
+async function reiniciarEstadisticasGenerales() {
+
+    const confirmar = confirm(
+        "Se eliminarán las estadísticas del generales.\n¿Seguro que desea continuar?"
+    );
+
+    if (!confirmar) return;
+
+    const ref = doc(db, "estadisticas_generales", "resumen");
+
+    bloquearUI();
+    
+    try {
+        await setDoc(ref, {
+            totalFacturado: 0,
+            mesasCerradas: 0,
+            pagos: {
+                Efectivo: 0,
+                Debito: 0,
+                Credito: 0,
+                Mercadopago: 0
+            }
+        });
+
+        console.log("📊 Estadísticas generales reiniciadas");
+    }
+    catch (error) {
+        console.error("❌ Error al reiniciar estadísticas generales:", error);
+        alert("Error al reiniciar estadísticas generales");
+    } finally {
+        desbloquearUI();
+    }
+}
+
 
 
 document.querySelector('[data-section="productos"]').addEventListener("click", cargarProductos);
