@@ -115,7 +115,7 @@ input, select {
 }
 
 
-@media (max-width: 1050px)
+@media (max-width: 1020px)
 {
     form{
         width: 100%;

@@ -73,7 +73,7 @@ footer .footer-btn:hover{
     cursor: pointer;
 }
 
-@media(max-width: 1050px)
+@media(max-width: 1020px)
 {
     .actions{
         flex-direction: column;
@@ -84,7 +84,7 @@ footer .footer-btn:hover{
     display: none !important;
 }
 
-@media(max-width: 1050px)
+@media(max-width: 1020px)
 {
     .oculto_mobile{
         display: none !important;

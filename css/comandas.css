@@ -115,7 +115,7 @@ input, select {
     z-index: 1;
 }
 
-@media (max-width: 1050px)
+@media (max-width: 1020px)
 {
     #formComanda{
         width: 100%;
@@ -149,6 +149,7 @@ input, select {
     overflow-y: auto;
     width: 90%;
     max-width: 500px;
+    position: relative;
 }
 
 .producto-card {
@@ -158,6 +159,10 @@ input, select {
     padding: 10px;
     border-bottom: 1px solid #ccc;
     background: #cce5ff;
+}
+
+.producto-card span{
+    width: 50%;
 }
 
 .producto-card button {
@@ -192,4 +197,33 @@ input, select {
 
 .producto-card.no-disponible button {
     cursor: not-allowed;
+}
+
+#productosModalButtons{
+    position: fixed;
+    bottom: 0%;
+    left: 50%;
+}
+
+@media (max-width: 1020px)
+{
+    #productosModalButtons{
+        margin-top: 15px;
+        text-align: right;
+        position: fixed;
+        bottom: 2%;
+        left: 10%;
+        background: #eee;
+        padding: 0.2rem 2rem;
+        border-radius: 10px;
+        width: 80%;
+    }
+}
+
+@media (max-width: 750px)
+{
+    #productosModalButtons{
+        width: 100%;
+        left: 0;
+    }
 }
