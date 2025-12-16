@@ -50,6 +50,11 @@ body {
     border-radius: 10px;
 }
 
+#logo-footer{
+    height: 2rem;
+    position: absolute;
+}
+
 
 footer {
     position: fixed;
