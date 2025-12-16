@@ -19,7 +19,7 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         inicializarComanda(user);
         
-        cargarProductos();
+        // cargarProductos();
 
     } else {
         window.location.href = "login.html";
@@ -100,27 +100,27 @@ function bloquearUI() {
 // =============================================================
 // 1. Cargar productos desde Firebase
 // =============================================================
-async function cargarProductos() {
-    const querySnapshot = await getDocs(collection(db, "productos"));
+// async function cargarProductos() {
+//     const querySnapshot = await getDocs(collection(db, "productos"));
 
-    productoSelect.innerHTML = "";
+//     productoSelect.innerHTML = "";
 
-    querySnapshot.forEach((docu) => {
-        const data = docu.data();
-        const option = document.createElement("option");
+//     querySnapshot.forEach((docu) => {
+//         const data = docu.data();
+//         const option = document.createElement("option");
 
-        option.value = docu.id;
-        option.textContent = `${data.nombre} ($${data.precio})`;
-        option.dataset.precio = data.precio;
+//         option.value = docu.id;
+//         option.textContent = `${data.nombre} ($${data.precio})`;
+//         option.dataset.precio = data.precio;
 
-        if (data.estado === "No disponible") {
-            option.disabled = true;
-            option.textContent += " — No disponible";
-        }
+//         if (data.estado === "No disponible") {
+//             option.disabled = true;
+//             option.textContent += " — No disponible";
+//         }
 
-        productoSelect.appendChild(option);
-    });
-}
+//         productoSelect.appendChild(option);
+//     });
+// }
 
 
 // =============================================================
