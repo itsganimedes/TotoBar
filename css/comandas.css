@@ -205,6 +205,14 @@ input, select {
     left: 50%;
 }
 
+#comentario{
+    resize: none;
+    border-radius: 4px;
+    padding: 1rem;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+}
+
 @media (max-width: 1020px)
 {
     #productosModalButtons{

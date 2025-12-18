@@ -357,3 +357,32 @@ body {
     height: 2px;
     margin: 2rem 0;
 }
+
+.input-buscador {
+    width: 100%;
+    max-width: 420px;
+    padding: 0.65rem 1rem;
+    margin: 0.8rem 0 1.2rem 0;
+    font-size: 1rem;
+    border-radius: 999px;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #111;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.input-buscador:focus {
+    border-color: #0072d9;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+
+@media (max-width:1050px)
+{
+    .input-buscador{
+        width: 100%;
+        max-width: 100%;
+    }
+}

@@ -124,6 +124,8 @@ function renderComandas() {
 
         const claseTiempo = obtenerClaseTiempo(data.fecha);
 
+        let comentario = data.comentario || "-";
+
         const div = document.createElement("div");
         div.className = `comanda ${claseTiempo}`;
 
@@ -138,6 +140,8 @@ function renderComandas() {
             <p><strong>Mesa:</strong> ${data.mesa}</p>
             <p><strong>Mozo:</strong> ${data.mozo}</p>
             <p><strong>Total:</strong> $${data.total}</p>
+
+            <p class="comment"><strong>Detalles:</strong> ${comentario}</p>
 
             <p>
                 <span class="estado ${data.estado}">

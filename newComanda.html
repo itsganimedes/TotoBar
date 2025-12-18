@@ -15,6 +15,22 @@
     <div id="modalProductos" class="modal oculto">
         <div class="modal-content">
             <h3>Selecciona Productos</h3>
+            <input
+                type="text"
+                id="buscadorProductos"
+                placeholder="🔍 Buscar producto..."
+                autocomplete="off"
+                style="
+                    width: 100%;
+                    padding: 0.6rem;
+                    margin: 0.8rem 0;
+                    border-radius: 6px;
+                    border: 1px solid #ccc;
+                    font-size: 1rem;
+                "
+            >
+
+            <p style="margin-top: 1rem;" class="loading">Cargando... <br><br>Si esto tarda más de 15 segundos, probablemente no tengas internet. <b style="color: green;">Utiliza WhatsApp!</b></p>
             <div id="productosGridComidas"></div>
             <div id="productosGridBebidas"></div>
             <div id="productosGridPostres"></div>
@@ -93,6 +109,16 @@
         <div class="section">
             <h3>Productos agregados</h3>
             <div id="listaProductos"></div>
+        </div>
+
+        <div class="section">
+            <h3>Detalles</h3>
+            <textarea
+                id="comentario"
+                rows="3"
+                placeholder="¿Sin mayonesa? ¿Agregados especiales?"
+                maxlength="200"
+            ></textarea>
         </div>
 
         <!-- Total -->

@@ -234,6 +234,8 @@ formComanda.addEventListener("submit", async (e) => {
 
     const mesaId = document.getElementById("mesa").value;
     const mozo = document.getElementById("mozo").textContent.trim();
+    const comentario = document.getElementById("comentario").value.trim() || "";
+
 
     if (!mesaId || productosAgregados.length === 0) {
         const errorp = document.querySelector(".error");
@@ -305,7 +307,8 @@ formComanda.addEventListener("submit", async (e) => {
             productos: productosAgregados,
             total,
             estado: "pendiente",
-            fecha: serverTimestamp()
+            fecha: serverTimestamp(),
+            comentario: comentario
         });
 
         // ➕ Sumar a la mesa
@@ -355,6 +358,7 @@ function calcularTotal(arr) {
 
 const modal = document.getElementById("modalProductos");
 
+const loading = document.querySelector(".loading");
 const productosGridComidas = document.getElementById("productosGridComidas");
 const productosGridBebidas = document.getElementById("productosGridBebidas");
 const productosGridPostres = document.getElementById("productosGridPostres");
@@ -365,6 +369,20 @@ const btnCerrarModal = document.getElementById("btnCerrarModal");
 const btnAgregarAlCarrito = document.getElementById("btnAgregarAlCarrito");
 
 let productosSeleccionados = {}; // {id: {nombre, precio, cantidad}}
+
+/* BUSCADOR */
+
+const buscador = document.getElementById("buscadorProductos");
+
+buscador.addEventListener("input", () => {
+    const texto = buscador.value.toLowerCase().trim();
+
+    document.querySelectorAll(".producto-card").forEach(card => {
+        const nombre = card.dataset.nombre;
+        card.style.display = nombre.includes(texto) ? "flex" : "none";
+    });
+});
+
 
 // Abrir modal
 btnAbrirModal.addEventListener("click", async () => {
@@ -377,12 +395,15 @@ btnAbrirModal.addEventListener("click", async () => {
 btnCerrarModal.addEventListener("click", () => {
     modal.classList.add("oculto");
     document.body.style.overflow = "auto";
+    buscador.value = "";
 });
 
 
 // Cargar productos en el modal
 async function cargarProductosModal() {
     const querySnapshot = await getDocs(collection(db, "productos"));
+
+    loading.style.display = "none";
 
     productosGridComidas.innerHTML = "<p style='border-bottom: 1px solid #ff3c00; padding-bottom: 0.5rem;'>🍔 Comidas</p>";
     productosGridBebidas.innerHTML = "<p style='border-bottom: 1px solid #ff3c00; padding-bottom: 0.5rem;'>🍹 Bebidas</p>";
@@ -392,6 +413,8 @@ async function cargarProductosModal() {
     querySnapshot.forEach(docu => {
         const data = docu.data();
         const card = document.createElement("div");
+        const nombreNormalizado = data.nombre.toLowerCase();
+        card.dataset.nombre = nombreNormalizado;
         const noDisponible = data.estado === "No disponible";
         card.classList.add("producto-card");
 
@@ -489,3 +512,6 @@ btnAgregarAlCarrito.addEventListener("click", () => {
 
     document.body.style.overflow = "auto";
 });
+
+
+

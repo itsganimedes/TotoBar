@@ -98,6 +98,10 @@ startAuthCheck();
 menuItems.forEach(item => {
     item.addEventListener("click", () => {
 
+        buscador.value = "";
+        ocultarCategoriasVacias();
+
+
         // Activar item
         menuItems.forEach(i => i.classList.remove("active"));
         item.classList.add("active");
@@ -123,6 +127,7 @@ document.getElementById("logout").addEventListener("click", () => {
 
 // Renderizar lista de mozos
 async function cargarMozos() {
+
     const contenedor = document.getElementById("mozos-list");
     contenedor.innerHTML = "<p>Cargando...</p>";
 
@@ -222,11 +227,67 @@ function activarBotonesMozos() {
 document.querySelector('[data-section="mozos"]').addEventListener("click", cargarMozos);
 
 
+/* BUSCADOR */ 
+
+const buscador = document.getElementById("buscadorProductos");
+
+buscador.addEventListener("input", () => {
+    const texto = buscador.value.toLowerCase().trim();
+
+    document.querySelectorAll(".producto-card").forEach(card => {
+        card.style.display =
+            card.dataset.nombre.includes(texto) ? "flex" : "none";
+    });
+
+    ocultarCategoriasVacias();
+});
+
+function ocultarCategoriasVacias() {
+    [
+        "productos-list-comidas",
+        "productos-list-bebidas",
+        "productos-list-postres",
+        "productos-list-otros"
+    ].forEach(id => {
+        const cont = document.getElementById(id);
+        const cards = cont.querySelectorAll(".producto-card");
+        const hayVisible = [...cards].some(c => c.style.display !== "none");
+        cont.style.display = hayVisible ? "block" : "none";
+    });
+}
+
+function resetearFiltroProductos() {
+    // Limpiar buscador
+    const buscador = document.getElementById("buscadorProductos");
+    if (buscador) buscador.value = "";
+
+    // Mostrar todas las cards
+    document.querySelectorAll(".producto-card").forEach(card => {
+        card.style.display = "flex";
+    });
+
+    // Mostrar todas las categorías
+    [
+        "productos-list-comidas",
+        "productos-list-bebidas",
+        "productos-list-postres",
+        "productos-list-otros"
+    ].forEach(id => {
+        const cont = document.getElementById(id);
+        if (cont) cont.style.display = "block";
+    });
+}
+
+
+
+
+
 // ===============================
 //     CARGAR PRODUCTOS
 // ===============================
 
 async function cargarProductos() {
+    resetearFiltroProductos();
     const contenedor = document.getElementById("productos-list");
     const contenedorComidas = document.getElementById("productos-list-comidas");
     const contenedorBebidas = document.getElementById("productos-list-bebidas");
@@ -250,7 +311,10 @@ async function cargarProductos() {
             const p = docu.data();
 
             const card = document.createElement("div");
+
             card.classList.add("producto-card");
+
+            card.dataset.nombre = p.nombre.toLowerCase();
 
             card.innerHTML = `
                 <div class="prod-info">
