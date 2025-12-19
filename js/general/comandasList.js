@@ -153,7 +153,7 @@ function renderComandas() {
             <div class="productos">
                 ${data.productos.map(p => `
                     <div class="producto-item">
-                        ${p.nombre} x${p.cantidad} — $${p.subtotal}
+                        ✔️ ${p.nombre} x${p.cantidad} — $${p.subtotal}
                     </div>
                 `).join("")}
             </div>
@@ -185,21 +185,29 @@ function agregarEventosCambioEstado() {
 
             let estadoActual = snap.data().estado || "pendiente";
 
-            if (estadoActual === "listo") {
-                const errorEl = document.querySelector(".errorCocina");
-                errorEl?.classList.remove("oculto");
+            bloquearUI();
 
-                setTimeout(() => {
-                    errorEl?.classList.add("oculto");
-                }, 3000); // 3000 ms = 3 segundos
+            try{
+                if (estadoActual === "listo") {
+                    const errorEl = document.querySelector(".errorCocina");
+                    errorEl?.classList.remove("oculto");
 
-                return;
+                    setTimeout(() => {
+                        errorEl?.classList.add("oculto");
+                    }, 3000); // 3000 ms = 3 segundos
+
+                    return;
+                }
+
+                let index = estados.indexOf(estadoActual);
+                let siguiente = estados[index + 1] || estados[0];
+
+                await updateDoc(ref, { estado: siguiente });
+            } catch (error) {
+                console.log("Error: " + error);
+            } finally {
+                desbloquearUI();
             }
-
-            let index = estados.indexOf(estadoActual);
-            let siguiente = estados[index + 1] || estados[0];
-
-            await updateDoc(ref, { estado: siguiente });
         };
     });
 }

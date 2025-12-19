@@ -87,7 +87,8 @@ function renderAvisos() {
         div.innerHTML = `
             <div class="aviso-content">
                 <h3>Orden #${data.numero} lista 🔔</h3>
-                <p class="time">⏱️ ${tiempoTranscurrido(data.fecha)}</p>
+                <p class="time">⏱️ Pedido hace ${tiempoTranscurrido(data.fecha)}</p>
+                <p><strong>Mozo:</strong> ${data.mozo}</p>
                 <p><strong>Mesa:</strong> ${data.mesa}</p>
                 <p><strong>Total:</strong> $${data.total}</p>
                 <button class="btn-2" data-id="${data.id}">Finalizar</button>

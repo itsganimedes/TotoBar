@@ -3,7 +3,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1rem;
-    padding: 1rem;
+    padding: 1rem 1rem 5rem 1rem;
 }
 
 /* CARD DE MESA */
@@ -191,7 +191,7 @@
 }
 
 .exito.mostrar {
-    animation: exitoIn 0.6s cubic-bezier(.22,1,.36,1),
+    animation: exitoIn 3s cubic-bezier(.22,1,.36,1),
     exitoOut 0.5s ease forwards;
     animation-delay: 0s, 3s;
 }
@@ -245,5 +245,12 @@
     }
     100% {
         transform: scale(1);
+    }
+}
+
+@media (max-width: 900px)
+{
+    .exito p{
+        font-size: 1.5rem;
     }
 }

@@ -52,7 +52,7 @@ body {
 
 #logo-footer{
     height: 2rem;
-    position: absolute;
+    position: fixed;
     bottom: 12%;
 }
 
